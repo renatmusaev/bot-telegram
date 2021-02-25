@@ -3,28 +3,25 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Keyboard extends Resource
+class Link extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Keyboard::class;
+    public static $model = \App\Link::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -32,7 +29,7 @@ class Keyboard extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id',
     ];
 
     /**
@@ -45,12 +42,8 @@ class Keyboard extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make(__('Name'), 'name')->rules('required', 'max:255'),
-            Textarea::make(__('Text'), 'text'),
-            BelongsTo::make(__('Parent'), 'parent', 'App\Nova\Keyboard')->nullable(),
-            HasMany::make(__('Children'), 'children', 'App\Nova\Keyboard'),
-            HasMany::make(__('Photo'), 'photos', 'App\Nova\Photo'),
-            HasMany::make(__('Link'), 'links', 'App\Nova\Link'),
+            Text::make(__('Link'), 'link'),
+            Text::make(__('Name'), 'name'),
         ];
     }
 

@@ -20,4 +20,9 @@ class Keyboard extends Model
     {
         return $this->hasMany('App\Photo');
     }
+    
+    public function links()
+    {
+        return $this->hasMany('App\Link');
+    }
 }

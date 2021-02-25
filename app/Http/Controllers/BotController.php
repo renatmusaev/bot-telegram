@@ -52,19 +52,39 @@ class BotController extends Controller
                 $keyboard = ModelKeyboard::with([
                     'children',
                     'photos',
+                    'links'
                 ])->where('name', $text)->first();
                 
                 if (!empty($keyboard)) {
                     if (
                         $keyboard->text == null &&
-                        $keyboard->photos->isEmpty()
+                        $keyboard->photos->isEmpty() &&
+                        $keyboard->links->isEmpty()
                     ) {
                         Telegram::sendMessage([
                             'chat_id' => $chat_id,
                             'text' => "empty content",
                         ]);
                     } else {
-                        if (!empty($keyboard->text)) {
+                        if (!$keyboard->photos->isEmpty() || !$keyboard->links->isEmpty()) {
+                            if (!$keyboard->photos->isEmpty()) {
+                                foreach ($keyboard->photos as $photo) {
+                                    Telegram::setAsyncRequest(false)->sendPhoto([
+                                        'chat_id' => $chat_id,
+                                        'photo' => \Telegram\Bot\FileUpload\InputFile::create("https://telegrambot.klac.kz/storage/{$photo->photo}"),
+                                        'caption' => $photo->caption
+                                    ]);
+                                }
+                            }
+                            if (!$keyboard->links->isEmpty()) {
+                                foreach ($keyboard->links as $link) {
+                                    Telegram::sendMessage([
+                                        'chat_id' => $chat_id,
+                                        'text' => $link->link,
+                                    ]);
+                                }
+                            }
+                        } else if (!empty($keyboard->text)) {
                             $message['chat_id'] = $chat_id;
                             $message['text'] = $keyboard->text;
 
@@ -83,17 +103,11 @@ class BotController extends Controller
                                 }
                             }
                             Telegram::sendMessage($message);
-                        }
-
-                        //
-                        if ($keyboard->photos->isEmpty()) {
-                            foreach ($keyboard->photos as $photo) {
-                                Telegram::setAsyncRequest(false)->sendPhoto([
-                                    'chat_id' => $chat_id,
-                                    'photo' => \Telegram\Bot\FileUpload\InputFile::create("https://telegrambot.klac.kz/storage/{$photo->photo}"),
-                                    'caption' => $photo->caption
-                                ]);
-                            }
+                        } else {
+                            Telegram::sendMessage([
+                                'chat_id' => $chat_id,
+                                'text' => "System error.",
+                            ]);
                         }
                     }
                 } else {
