@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Keyboard extends Resource
@@ -45,9 +46,10 @@ class Keyboard extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('Name'), 'name')->rules('required', 'max:255'),
+            Textarea::make(__('Text'), 'text'),
             BelongsTo::make(__('Parent'), 'parent', 'App\Nova\Keyboard')->nullable(),
             HasMany::make(__('Children'), 'children', 'App\Nova\Keyboard'),
-            HasMany::make(__('Messages'), 'messages', 'App\Nova\Message'),
+            //HasMany::make(__('Messages'), 'messages', 'App\Nova\Message'),
         ];
     }
 
