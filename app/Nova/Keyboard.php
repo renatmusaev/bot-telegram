@@ -49,7 +49,7 @@ class Keyboard extends Resource
             Textarea::make(__('Text'), 'text'),
             BelongsTo::make(__('Parent'), 'parent', 'App\Nova\Keyboard')->nullable(),
             HasMany::make(__('Children'), 'children', 'App\Nova\Keyboard'),
-            //HasMany::make(__('Messages'), 'messages', 'App\Nova\Message'),
+            HasMany::make(__('Photo'), 'photos', 'App\Nova\Photo'),
         ];
     }
 

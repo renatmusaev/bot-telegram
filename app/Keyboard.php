@@ -16,8 +16,8 @@ class Keyboard extends Model
         return $this->hasMany('App\Keyboard', 'parent_id');
     }
     
-    public function messages()
+    public function photos()
     {
-        return $this->hasMany('App\Message');
+        return $this->hasMany('App\Photo');
     }
 }

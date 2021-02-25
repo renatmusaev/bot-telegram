@@ -4,24 +4,25 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Message extends Resource
+class Photo extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Message::class;
+    public static $model = \App\Photo::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'text';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -29,7 +30,7 @@ class Message extends Resource
      * @var array
      */
     public static $search = [
-        'text',
+        'id',
     ];
 
     /**
@@ -42,7 +43,12 @@ class Message extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Textarea::make(__('Text'), 'text')->rules('required')->showOnIndex(),
+            Image::make(__('Photo'), 'photo')
+                ->disk('public')
+                ->path('photo')
+                ->creationRules('required')
+                ->hideFromIndex(),
+            Text::make(__('Caption'), 'caption'),
         ];
     }
 
