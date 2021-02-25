@@ -12,11 +12,6 @@ class BotController extends Controller
 {
     public function telegram()
     {
-        $keyboards = ModelKeyboard::with([
-            'children'
-        ])->where('name', 'Қазақша')->first();
-        dd($keyboards);
-
         $response = Telegram::getWebHookUpdates();
         if (!$response->isEmpty()) {
             $chat_id = $response['message']['chat']['id'];
